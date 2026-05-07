@@ -1,0 +1,22 @@
+cache: {},
+
+fetchUsers: async (page) => {
+  if (get().cache[page]) {
+    set({
+      users: get().cache[page],
+    });
+
+    return;
+  }
+
+  const res = await api.get(...);
+
+  set((state) => ({
+    users: res.data.users,
+    cache: {
+      ...state.cache,
+      [page]: res.data.users,
+    },
+  }));
+
+};
