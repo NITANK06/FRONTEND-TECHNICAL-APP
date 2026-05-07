@@ -1,0 +1,27 @@
+<Grid container spacing={3}>
+  {products.map((product) => (
+    <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
+      <Card>
+        <CardMedia
+          component="img"
+          height="200"
+          image={product.thumbnail}
+        />
+
+        <CardContent>
+          <Typography variant="h6">
+            {product.title}
+          </Typography>
+
+          <Typography>
+            ${product.price}
+          </Typography>
+
+          <Typography>
+            Rating: {product.rating}
+          </Typography>
+        </CardContent>
+      </Card>
+    </Grid>
+  ))}
+</Grid>
