@@ -78,9 +78,6 @@ A modern admin dashboard built with Next.js, Material UI (MUI), Zustand, and Dum
  Clean dashboard layout
 
 
-
-** Why Zustand?**
-
 Zustand IS chosen because
 
  Has a very small bundle size
