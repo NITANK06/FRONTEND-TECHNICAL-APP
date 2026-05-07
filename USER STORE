@@ -1,0 +1,30 @@
+import { create } from "zustand";
+import api from "@/services/api";
+
+interface UserState {
+  users: any[];
+  total: number;
+  fetchUsers: (
+    limit?: number,
+    skip?: number,
+    search?: string
+  ) => Promise<void>;
+}
+
+export const useUsersStore = create<UserState>((set) => ({
+  users: [],
+  total: 0,
+
+  fetchUsers: async (limit = 10, skip = 0, search = "") => {
+    const endpoint = search
+      ? `/users/search?q=${search}`
+      : `/users?limit=${limit}&skip=${skip}`;
+
+    const res = await api.get(endpoint);
+
+    set({
+      users: res.data.users,
+      total: res.data.total,
+    });
+  },
+}));
