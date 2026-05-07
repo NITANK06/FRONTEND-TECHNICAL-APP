@@ -1,0 +1,75 @@
+"use client";
+
+import {
+  Button,
+  Card,
+  CardContent,
+  Container,
+  TextField,
+  Typography,
+} from "@mui/material";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/store/authStore";
+
+export default function LoginPage() {
+  const router = useRouter();
+
+  const login = useAuthStore((state) => state.login);
+
+  const [form, setForm] = useState({
+    username: "",
+    password: "",
+  });
+
+  const handleLogin = async () => {
+    const success = await login(form.username, form.password);
+
+    if (success) {
+      router.push("/dashboard");
+    } else {
+      alert("Invalid credentials");
+    }
+  };
+
+  return (
+    <Container maxWidth="sm">
+      <Card sx={{ mt: 10 }}>
+        <CardContent>
+          <Typography variant="h4" mb={3}>
+            Admin Login
+          </Typography>
+
+          <TextField
+            fullWidth
+            label="Username"
+            margin="normal"
+            onChange={(e) =>
+              setForm({ ...form, username: e.target.value })
+            }
+          />
+
+          <TextField
+            fullWidth
+            label="Password"
+            type="password"
+            margin="normal"
+            onChange={(e) =>
+              setForm({ ...form, password: e.target.value })
+            }
+          />
+
+          <Button
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3 }}
+            onClick={handleLogin}
+          >
+            Login
+          </Button>
+        </CardContent>
+      </Card>
+    </Container>
+  );
+}
