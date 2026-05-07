@@ -1,0 +1,30 @@
+import { create } from "zustand";
+import api from "@/services/api";
+
+interface ProductState {
+  products: any[];
+  total: number;
+  fetchProducts: (
+    limit?: number,
+    skip?: number,
+    search?: string
+  ) => Promise<void>;
+}
+
+export const useProductsStore = create<ProductState>((set) => ({
+  products: [],
+  total: 0,
+
+  fetchProducts: async (limit = 20, skip = 0, search = "") => {
+    const endpoint = search
+      ? `/products/search?q=${search}`
+      : `/products?limit=${limit}&skip=${skip}`;
+
+    const res = await api.get(endpoint);
+
+    set({
+      products: res.data.products,
+      total: res.data.total,
+    });
+  },
+}));
