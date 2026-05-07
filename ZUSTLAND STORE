@@ -1,0 +1,49 @@
+import { create } from "zustand";
+import api from "@/services/api";
+
+interface AuthState {
+  token: string | null;
+  user: any;
+  loading: boolean;
+  login: (username: string, password: string) => Promise<boolean>;
+  logout: () => void;
+}
+
+export const useAuthStore = create<AuthState>((set) => ({
+  token: localStorage.getItem("token") || null,
+  user: null,
+  loading: false,
+
+  login: async (username, password) => {
+    try {
+      set({ loading: true });
+
+      const res = await api.post("/auth/login", {
+        username,
+        password,
+      });
+
+      localStorage.setItem("token", res.data.token);
+
+      set({
+        token: res.data.token,
+        user: res.data,
+        loading: false,
+      });
+
+      return true;
+    } catch (error) {
+      set({ loading: false });
+      return false;
+    }
+  },
+
+  logout: () => {
+    localStorage.removeItem("token");
+
+    set({
+      token: null,
+      user: null,
+    });
+  },
+}));
